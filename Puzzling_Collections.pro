@@ -8,15 +8,17 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Puzzling_Collections
+TARGET = Puzzling_Collections \
+
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp
+SOURCES += main.cpp \
+    test.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += \
+    test.h
 
-FORMS    += mainwindow.ui
+FORMS    +=
 
 CONFIG += console
