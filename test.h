@@ -3,6 +3,20 @@
 
 #include <QObject>
 #include <QStandardItemModel>
+#include <QTableView>
+#include <QWidget>
+#include <QImage>
+#include <QTextStream>
+#include <QModelIndex>
+#include <QMessageBox>
+#include <QHeaderView>
+#include <QEvent>
+#include <cstdlib>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <time.h>
 
 class test : public QObject
 {
@@ -12,9 +26,17 @@ public:
         int row;
         int column;
     } emp;
+
     test();
     ~test();
     void init();
+    void swapWithEmpty(int row, int column);
+    void randomConfig();
+
+    QStandardItemModel *model;
+    QTableView *table;
+    std::vector<QImage> images;
+    std::vector<QImage> fullPicture;
 
 public slots:
     void onTableClicked(const QModelIndex &i);
