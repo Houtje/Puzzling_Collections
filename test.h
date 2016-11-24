@@ -6,6 +6,8 @@
 #include <QTableView>
 #include <QWidget>
 #include <QImage>
+#include <QPicture>
+#include <QLabel>
 #include <QTextStream>
 #include <QModelIndex>
 #include <QMessageBox>
@@ -32,9 +34,11 @@ public:
     void init();
     void swapWithEmpty(int row, int column);
     void randomConfig();
+    void onPuzzleCompleted();
 
     QStandardItemModel *model;
     QTableView *table;
+    QWidget *widget;
     std::vector<QImage> images;
     std::vector<QImage> fullPicture;
 
