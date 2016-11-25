@@ -1,13 +1,14 @@
-#include "test.h"
+#include "puzzle.h"
+#include "main_menu.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    test *t = new test();
+    main_menu *m = new main_menu();
 
-    t->init();
+    m->init();
 
     return a.exec();
 }

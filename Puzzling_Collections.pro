@@ -14,10 +14,14 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    test.cpp
+    puzzle.cpp \
+    main_menu.cpp \
+    help_screen.cpp
 
 HEADERS  += \
-    test.h
+    puzzle.h \
+    main_menu.h \
+    help_screen.h
 
 FORMS    +=
 

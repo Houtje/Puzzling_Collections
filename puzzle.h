@@ -1,5 +1,5 @@
-#ifndef TEST_H
-#define TEST_H
+#ifndef puzzle_H
+#define puzzle_H
 
 #include <QObject>
 #include <QStandardItemModel>
@@ -12,7 +12,6 @@
 #include <QModelIndex>
 #include <QMessageBox>
 #include <QHeaderView>
-#include <QEvent>
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
@@ -20,7 +19,7 @@
 #include <vector>
 #include <time.h>
 
-class test : public QObject
+class puzzle : public QObject
 {
     Q_OBJECT
 public:
@@ -29,13 +28,15 @@ public:
         int column;
     } emp;
 
-    test();
-    ~test();
+    puzzle();
+    ~puzzle();
     void init();
     void swapWithEmpty(int row, int column);
     void randomConfig();
     void onPuzzleCompleted();
+    void disableSelection();
 
+private:
     QStandardItemModel *model;
     QTableView *table;
     QWidget *widget;
@@ -47,4 +48,4 @@ public slots:
 
 };
 
-#endif // TEST_H
+#endif // puzzle_H

@@ -1,9 +1,9 @@
-#include "test.h"
+#include "puzzle.h"
 
 QTextStream out(stdout);
 
 // Constructor
-test::test()
+puzzle::puzzle()
 {
     emp = {3,2};
     model = NULL;
@@ -12,7 +12,7 @@ test::test()
 }
 
 // Destructor
-test::~test()
+puzzle::~puzzle()
 {
 
 }
@@ -36,19 +36,17 @@ QImage getImage(int row, int column){
     return image;
 }
 
-// WIP: Shows the full picture after the puzzle is completed.
-void test::onPuzzleCompleted(){
+// Shows the full picture after the puzzle is completed.
+void puzzle::onPuzzleCompleted(){
     QLabel *label = new QLabel();
-    label->setPixmap(QPixmap("C:/Users/Joris/Documents/Puzzling_Collections/images/full.png"));
-    label->resize(1625,915);
+    label->setPixmap(QPixmap("C:/Users/Joris/Documents/Puzzling_Collections/images/full.jpg"));
+    label->resize(1600,900);
     label->show();
-    label->setVisible(true);
-    label->setFocus();
     widget->close();
 }
 
 // Loops turns to create a random starting configuration.
-void test::randomConfig(){
+void puzzle::randomConfig(){
     srand(time(NULL));
     for(int i = 0; i < 100; i++){
         int move = rand() % 4;
@@ -73,13 +71,23 @@ void test::randomConfig(){
     }
 }
 
+// Disables selection for all elements.
+void puzzle::disableSelection(){
+    for (int r = 0; r < 4; ++r)
+        for (int c = 0; c < 3; ++c)
+            model->item(r,c)->setSelectable(false);
+}
+
 // Swaps the tile specified with the empty tile.
-void test::swapWithEmpty(int row, int column){
+void puzzle::swapWithEmpty(int row, int column){
     QStandardItem *item = new QStandardItem();
     QStandardItem *emp_item = new QStandardItem();
 
     item->setData(QVariant(QPixmap::fromImage(images[(row*3 + column)])), Qt::DecorationRole);
     emp_item->setData(QVariant(QPixmap::fromImage(images[(emp.row*3 + emp.column)])), Qt::DecorationRole);
+
+    emp_item->setEnabled(false);
+    item->setEnabled(true);
 
     model->setItem(emp.row, emp.column, item);
     model->setItem(row, column, emp_item);
@@ -90,10 +98,12 @@ void test::swapWithEmpty(int row, int column){
 
     emp.row = row;
     emp.column = column;
+
+    disableSelection();
 }
 
 // Swaps the tile if applicable.
-void test::onTableClicked(const QModelIndex &i)
+void puzzle::onTableClicked(const QModelIndex &i)
 {
     if((i.row() == emp.row-1 && i.column() == emp.column)
     ||(i.row() == emp.row && i.column() == emp.column-1)
@@ -110,7 +120,7 @@ void test::onTableClicked(const QModelIndex &i)
 }
 
 // Initializes the program with several values.
-void test::init()
+void puzzle::init()
 {
     widget = new QWidget();
 
@@ -123,12 +133,14 @@ void test::init()
 
             QStandardItem *item = new QStandardItem();
             item->setData(QVariant(QPixmap::fromImage(image)), Qt::DecorationRole);
-
+            item->setSelectable(false);
+            if (row == 3 && column == 2)
+                item->setEnabled(false);
             model->setItem(row, column, item);
         }
     }
 
-    // randomConfig();
+    randomConfig();
 
     table = new QTableView(widget);
     table->setModel(model);
