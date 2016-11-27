@@ -1,5 +1,5 @@
-#ifndef MAIN_MENU_H
-#define MAIN_MENU_H
+#ifndef DIFFICULTY_SCREEN_H
+#define DIFFICULTY_SCREEN_H
 
 #include <QObject>
 #include <QTableView>
@@ -9,34 +9,31 @@
 #include <QFont>
 #include <QColor>
 #include <QPalette>
-#include <time.h>
-#include <cstdlib>
 
-class Main_Menu : public QObject
+class Difficulty_Screen : public QObject
 {
     Q_OBJECT
 
 protected:
     enum Screen {
-        SC_QUICK,
-        SC_SELECT,
-        SC_HELP,
         SC_BROWSE,
+        SC_PUZZLE,
     };
     QTableView *table;
     QWidget *widget;
+    int clickedImage;
 
 public:
-    Main_Menu();
-    ~Main_Menu();
+    Difficulty_Screen(int image);
+    ~Difficulty_Screen();
     void init();
     void toScreen(Screen s);
     QStandardItemModel *createModel();
+    QString ItoS(int number);
+    QImage getFullImage(int number);
 
 public slots:
     void onTableClicked(const QModelIndex &i);
 };
 
-
-
-#endif // MAIN_MENU_H
+#endif // DIFFICULTY_SCREEN_H

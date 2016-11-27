@@ -1,49 +1,62 @@
 #include "help_screen.h"
+#include "browse_screen.h"
 #include "main_menu.h"
 #include "puzzle.h"
 
-// Destructor
-help_screen::help_screen()
+#define ALL_IMAGES 5
+
+// Constructor
+Help_Screen::Help_Screen()
 {
     table = NULL;
     widget = NULL;
 }
 
-// Constructor
-help_screen::~help_screen(){
+// Destructor
+Help_Screen::~Help_Screen(){
 
 }
 
-// Starts the puzzle.
-void help_screen::startPuzzle(){
-   puzzle *p = new puzzle();
-   p->init();
-   widget->close();
+// Goes to one of the screens.
+void Help_Screen::toScreen(Screen s){
+    switch(s){
+        case SC_MAIN: {
+            Main_Menu *m = new Main_Menu();
+            m->init();
+            widget->close();
+        } break;
+        case SC_BROWSE: {
+            Browse_Screen *b = new Browse_Screen(0);
+            b->init();
+            widget->close();
+        } break;
+        case SC_SELECT: {
+            Puzzle *p = new Puzzle();
+            p->init(0);
+        } break;
+        case SC_QUICK: {
+            Puzzle *p = new Puzzle();
+            srand(time(NULL));
+            p->init(rand() % ALL_IMAGES);
+        } break;
+    }
 }
-
-// Returns to the main menu.
-void help_screen::returnToMain(){
-    main_menu *m = new main_menu();
-    m->init();
-    widget->close();
-}
-
 
 // Starts several subprograms.
-void help_screen::onTableClicked(const QModelIndex &i)
+void Help_Screen::onTableClicked(const QModelIndex &i)
 {
     if(i.row() == 0 && i.column() == 2)
-        returnToMain();
+        toScreen(SC_MAIN);
     else if(i.row() == 3 && i.column() == 0)
-        startPuzzle();
+        toScreen(SC_BROWSE);
     else if(i.row() == 3 && i.column() == 1)
-        startPuzzle();
+        toScreen(SC_SELECT);
     else if(i.row() == 3 && i.column() == 2)
-        startPuzzle();
+        toScreen(SC_QUICK);
 }
 
 // Creates the help screen model to be used in the table.
-QStandardItemModel *help_screen::createModel(){
+QStandardItemModel *Help_Screen::createModel(){
     QStandardItemModel *model = new QStandardItemModel(4,3);
     QColor color(0,0,255,50);
 
@@ -53,7 +66,6 @@ QStandardItemModel *help_screen::createModel(){
     item1->setFont(font1);
     item1->setTextAlignment(Qt::AlignCenter);
     item1->setData(QVariant(color), Qt::BackgroundRole);
-
     item1->setText("Browse");
     model->setItem(3, 0, item1);
 
@@ -114,30 +126,30 @@ QStandardItemModel *help_screen::createModel(){
 
 
 // Initializes the help screen.
-void help_screen::init(){
-           widget = new QWidget();
+void Help_Screen::init(){
+    widget = new QWidget();
 
-           table = new QTableView(widget);
-           table->setModel(createModel());
-           table->verticalHeader()->hide();
-           table->horizontalHeader()->hide();
+    table = new QTableView(widget);
+    table->setModel(createModel());
+    table->verticalHeader()->hide();
+    table->horizontalHeader()->hide();
 
-           for(int i = 0; i < 4; i++)
-               table->setRowHeight(i, 225);
-           for(int i = 0; i < 3; i++)
-               table->setColumnWidth(i, 533);
-           table->resize(1625,914);
+    for(int i = 0; i < 4; i++)
+       table->setRowHeight(i, 225);
+    for(int i = 0; i < 3; i++)
+       table->setColumnWidth(i, 533);
+    table->resize(1625,914);
 
-           QPalette palette = table->palette();
-           QColor color(0,0,255,50);
-           palette.setBrush(QPalette::Highlight,QBrush(color));
-           palette.setBrush(QPalette::HighlightedText,QBrush(Qt::black));
-           table->setPalette(palette);
-           table->setFocusPolicy(Qt::NoFocus);
+    QPalette palette = table->palette();
+    QColor color(0,0,255,50);
+    palette.setBrush(QPalette::Highlight,QBrush(color));
+    palette.setBrush(QPalette::HighlightedText,QBrush(Qt::black));
+    table->setPalette(palette);
+    table->setFocusPolicy(Qt::NoFocus);
 
-           this->connect(table, SIGNAL(clicked(QModelIndex)), SLOT(onTableClicked(QModelIndex)));
+    this->connect(table, SIGNAL(clicked(QModelIndex)), SLOT(onTableClicked(QModelIndex)));
 
-           widget->setWindowTitle("Puzzling Collections");
-           widget->resize(1600,899);
-           widget->show();
+    widget->setWindowTitle("Puzzling Collections");
+    widget->resize(1600,899);
+    widget->show();
 }

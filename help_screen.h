@@ -9,24 +9,32 @@
 #include <QFont>
 #include <QColor>
 #include <QPalette>
+#include <time.h>
+#include <cstdlib>
 
-class help_screen : public QObject
+class Help_Screen : public QObject
 {
     Q_OBJECT
-public slots:
-    void onTableClicked(const QModelIndex &i);
 
-public:
-    help_screen();
-    ~help_screen();
-    void init();
-    void startPuzzle();
-    void returnToMain();
-    QStandardItemModel *createModel();
-
-private:
+protected:
+    enum Screen {
+        SC_QUICK,
+        SC_SELECT,
+        SC_MAIN,
+        SC_BROWSE,
+    };
     QTableView *table;
     QWidget *widget;
+
+public:
+    Help_Screen();
+    ~Help_Screen();
+    void init();
+    void toScreen(Screen s);
+    QStandardItemModel *createModel();
+
+public slots:
+    void onTableClicked(const QModelIndex &i);
 };
 
 #endif // HELP_SCREEN_H

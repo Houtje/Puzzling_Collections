@@ -1,5 +1,5 @@
-#ifndef MAIN_MENU_H
-#define MAIN_MENU_H
+#ifndef BROWSE_SCREEN_H
+#define BROWSE_SCREEN_H
 
 #include <QObject>
 #include <QTableView>
@@ -9,34 +9,35 @@
 #include <QFont>
 #include <QColor>
 #include <QPalette>
-#include <time.h>
-#include <cstdlib>
+#include <QDialogButtonBox>
+#include <QPushButton>
 
-class Main_Menu : public QObject
+class Browse_Screen : public QObject
 {
     Q_OBJECT
 
 protected:
     enum Screen {
-        SC_QUICK,
-        SC_SELECT,
-        SC_HELP,
-        SC_BROWSE,
+        SC_MAIN,
+        SC_DIFF,
     };
     QTableView *table;
     QWidget *widget;
+    int imgBlock;
+    int clickedImage;
 
 public:
-    Main_Menu();
-    ~Main_Menu();
+    Browse_Screen(int block);
+    ~Browse_Screen();
     void init();
     void toScreen(Screen s);
     QStandardItemModel *createModel();
+    QString ItoS(int number);
+    QImage getFullImage(int number);
 
 public slots:
     void onTableClicked(const QModelIndex &i);
 };
 
 
-
-#endif // MAIN_MENU_H
+#endif // BROWSE_SCREEN_H

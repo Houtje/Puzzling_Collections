@@ -1,47 +1,64 @@
 #include "main_menu.h"
 #include "help_screen.h"
+#include "browse_screen.h"
 #include "puzzle.h"
 
-// Destructor
-main_menu::main_menu()
+#define ALL_IMAGES 5
+
+QTextStream out(stdout);
+
+// Constructor
+Main_Menu::Main_Menu()
 {
     table = NULL;
     widget = NULL;
 }
 
-// Constructor
-main_menu::~main_menu(){
+// Destructor
+Main_Menu::~Main_Menu(){
 
 }
 
-// Starts the puzzle.
-void main_menu::startPuzzle(){
-   puzzle *p = new puzzle();
-   p->init();
-   widget->close();
-}
-
-void main_menu::startHelp(){
-    help_screen *h = new help_screen();
-    h->init();
-    widget->close();
+// Goes to one of the screens.
+void Main_Menu::toScreen(Screen s){
+    switch(s){
+        case SC_HELP: {
+            Help_Screen *h = new Help_Screen();
+            h->init();
+            widget->close();
+        } break;
+        case SC_BROWSE: {
+            Browse_Screen *b = new Browse_Screen(0);
+            b->init();
+            widget->close();
+        } break;
+        case SC_SELECT: {
+            Puzzle *p = new Puzzle();
+            p->init(0);
+        } break;
+        case SC_QUICK: {
+            Puzzle *p = new Puzzle();
+            srand(time(NULL));
+            p->init(rand() % ALL_IMAGES);
+        } break;
+    }
 }
 
 // Starts several subprograms.
-void main_menu::onTableClicked(const QModelIndex &i)
+void Main_Menu::onTableClicked(const QModelIndex &i)
 {
     if(i.row() == 0 && i.column() == 2)
-        startHelp();
+        toScreen(SC_HELP);
     else if(i.row() == 2 && i.column() == 0)
-        startPuzzle();
+        toScreen(SC_BROWSE);
     else if(i.row() == 2 && i.column() == 1)
-        startPuzzle();
+        toScreen(SC_SELECT);
     else if(i.row() == 2 && i.column() == 2)
-        startPuzzle();
+        toScreen(SC_QUICK);
 }
 
 // Creates the main menu model to be used in the table.
-QStandardItemModel *main_menu::createModel(){
+QStandardItemModel *Main_Menu::createModel(){
     QStandardItemModel *model = new QStandardItemModel(4,3);
     QColor color(0,0,255,50);
 
@@ -51,7 +68,6 @@ QStandardItemModel *main_menu::createModel(){
     item1->setFont(font1);
     item1->setTextAlignment(Qt::AlignCenter);
     item1->setData(QVariant(color), Qt::BackgroundRole);
-
     item1->setText("Browse");
     model->setItem(2, 0, item1);
 
@@ -97,7 +113,7 @@ QStandardItemModel *main_menu::createModel(){
 
 
 // Initializes the main menu.
-void main_menu::init(){
+void Main_Menu::init(){
            widget = new QWidget();
 
            table = new QTableView(widget);

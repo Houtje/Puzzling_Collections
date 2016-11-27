@@ -16,12 +16,16 @@ TEMPLATE = app
 SOURCES += main.cpp \
     puzzle.cpp \
     main_menu.cpp \
-    help_screen.cpp
+    help_screen.cpp \
+    browse_screen.cpp \
+    difficulty_screen.cpp
 
 HEADERS  += \
     puzzle.h \
     main_menu.h \
-    help_screen.h
+    help_screen.h \
+    browse_screen.h \
+    difficulty_screen.h
 
 FORMS    +=
 

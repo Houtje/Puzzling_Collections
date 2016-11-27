@@ -1,33 +1,48 @@
-#include "puzzle.h"
+#include "Puzzle.h"
 
-QTextStream out(stdout);
+#define ALL_IMAGES 5
 
 // Constructor
-puzzle::puzzle()
+Puzzle::Puzzle()
 {
     emp = {3,2};
     model = NULL;
     table = NULL;
     widget = NULL;
+    imgNumber = 0;
 }
 
 // Destructor
-puzzle::~puzzle()
+Puzzle::~Puzzle()
 {
 
 }
 
 // Converts an integer to a string.
-QString ItoS ( int number )
+QString Puzzle::ItoS(int number)
 {
   std::ostringstream oss;
   oss << number;
   return QString::fromStdString(oss.str());
 }
 
+// Gets the full image at the number specified.
+QImage Puzzle::getFullImage(int number){
+    if(number >= 0 && number < ALL_IMAGES){
+        QString str = "C:/Users/Joris/Documents/Puzzling_Collections/images/";
+        str += ItoS(number);
+        str += ".jpg";
+        QImage image(str);
+        return image;
+    }
+    return QImage(NULL);
+}
+
 // Gets the initial image for the tile specified.
-QImage getImage(int row, int column){
-    QString str = "C:/Users/Joris/Documents/Puzzling_Collections/images/_";
+QImage Puzzle::getImage(int row, int column, int number){
+    QString str = "C:/Users/Joris/Documents/Puzzling_Collections/images/";
+    str += ItoS(number);
+    str += "/_";
     str += ItoS(row);
     str += "_";
     str += ItoS(column);
@@ -37,16 +52,17 @@ QImage getImage(int row, int column){
 }
 
 // Shows the full picture after the puzzle is completed.
-void puzzle::onPuzzleCompleted(){
+void Puzzle::onPuzzleCompleted(){
     QLabel *label = new QLabel();
-    label->setPixmap(QPixmap("C:/Users/Joris/Documents/Puzzling_Collections/images/full.jpg"));
+    QImage image = getFullImage(imgNumber);
+    label->setPixmap(QPixmap::fromImage(image));
     label->resize(1600,900);
     label->show();
     widget->close();
 }
 
 // Loops turns to create a random starting configuration.
-void puzzle::randomConfig(){
+void Puzzle::randomConfig(){
     srand(time(NULL));
     for(int i = 0; i < 100; i++){
         int move = rand() % 4;
@@ -72,14 +88,14 @@ void puzzle::randomConfig(){
 }
 
 // Disables selection for all elements.
-void puzzle::disableSelection(){
+void Puzzle::disableSelection(){
     for (int r = 0; r < 4; ++r)
         for (int c = 0; c < 3; ++c)
             model->item(r,c)->setSelectable(false);
 }
 
 // Swaps the tile specified with the empty tile.
-void puzzle::swapWithEmpty(int row, int column){
+void Puzzle::swapWithEmpty(int row, int column){
     QStandardItem *item = new QStandardItem();
     QStandardItem *emp_item = new QStandardItem();
 
@@ -103,7 +119,7 @@ void puzzle::swapWithEmpty(int row, int column){
 }
 
 // Swaps the tile if applicable.
-void puzzle::onTableClicked(const QModelIndex &i)
+void Puzzle::onTableClicked(const QModelIndex &i)
 {
     if((i.row() == emp.row-1 && i.column() == emp.column)
     ||(i.row() == emp.row && i.column() == emp.column-1)
@@ -120,14 +136,16 @@ void puzzle::onTableClicked(const QModelIndex &i)
 }
 
 // Initializes the program with several values.
-void puzzle::init()
+void Puzzle::init(int number)
 {
+    imgNumber = number;
+
     widget = new QWidget();
 
     model = new QStandardItemModel(4,3);
     for (int row = 0; row < 4; ++row) {
         for (int column = 0; column < 3; ++column) {
-            QImage image = getImage(row, column);
+            QImage image = getImage(row, column, number);
             images.push_back(image);
             fullPicture.push_back(image);
 

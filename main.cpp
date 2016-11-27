@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    main_menu *m = new main_menu();
+    Main_Menu *m = new Main_Menu();
 
     m->init();
 
