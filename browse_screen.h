@@ -11,7 +11,10 @@
 #include <QPalette>
 #include <QDialogButtonBox>
 #include <QPushButton>
+<<<<<<< HEAD
 #include <QDir>
+=======
+>>>>>>> 627d25b3ecb3405723aa84bfabecea8a320eeb19
 
 class Browse_Screen : public QObject
 {
@@ -34,7 +37,11 @@ public:
     void toScreen(Screen s);
     QStandardItemModel *createModel();
     QString ItoS(int number);
+<<<<<<< HEAD
     QImage *getFullImage(int number);
+=======
+    QImage getFullImage(int number);
+>>>>>>> 627d25b3ecb3405723aa84bfabecea8a320eeb19
 
 public slots:
     void onTableClicked(const QModelIndex &i);

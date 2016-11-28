@@ -6,8 +6,11 @@
 
 #define ALL_IMAGES 5
 
+<<<<<<< HEAD
 QTextStream out(stdout);
 
+=======
+>>>>>>> 627d25b3ecb3405723aa84bfabecea8a320eeb19
 // Constructor
 Browse_Screen::Browse_Screen(int block)
 {
@@ -31,6 +34,7 @@ QString Browse_Screen::ItoS(int number)
 }
 
 // Gets the full image at the number specified.
+<<<<<<< HEAD
 QImage *Browse_Screen::getFullImage(int number){
     if(number >= 0 && number < ALL_IMAGES){
         QString str = QDir::currentPath();
@@ -42,6 +46,17 @@ QImage *Browse_Screen::getFullImage(int number){
         return image;
     }
     return NULL;
+=======
+QImage Browse_Screen::getFullImage(int number){
+    if(number >= 0 && number < ALL_IMAGES){
+        QString str = "C:/Users/Joris/Documents/Puzzling_Collections/images/";
+        str += ItoS(number);
+        str += ".jpg";
+        QImage image(str);
+        return image;
+    }
+    return QImage(NULL);
+>>>>>>> 627d25b3ecb3405723aa84bfabecea8a320eeb19
 }
 
 // Goes to one of the screens.
@@ -78,8 +93,13 @@ void Browse_Screen::onTableClicked(const QModelIndex &i)
     || (i.row() == 2 && i.column() == 1)
     || (i.row() == 2 && i.column() == 2)){
         clickedImage = (imgBlock*4)+(((i.row()-1)*2)+(i.column()-1));
+<<<<<<< HEAD
         QImage *image = getFullImage(clickedImage);
         if(image != NULL){
+=======
+        QImage image = getFullImage(clickedImage);
+        if(image != QImage(NULL)){
+>>>>>>> 627d25b3ecb3405723aa84bfabecea8a320eeb19
             QPushButton *p1 = new QPushButton(tr("&Zoom"));
             QPushButton *p2 = new QPushButton(tr("&Puzzle"));
             QMessageBox box;
@@ -89,7 +109,11 @@ void Browse_Screen::onTableClicked(const QModelIndex &i)
             box.exec();
                 if(box.clickedButton() == p1){
                     QLabel *label = new QLabel();
+<<<<<<< HEAD
                     label->setPixmap(QPixmap::fromImage(*image));
+=======
+                    label->setPixmap(QPixmap::fromImage(image));
+>>>>>>> 627d25b3ecb3405723aa84bfabecea8a320eeb19
                     label->resize(1600,900);
                     label->show();
                 }
