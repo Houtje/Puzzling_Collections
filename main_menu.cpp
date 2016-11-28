@@ -5,11 +5,6 @@
 
 #define ALL_IMAGES 5
 
-<<<<<<< HEAD
-=======
-QTextStream out(stdout);
-
->>>>>>> 627d25b3ecb3405723aa84bfabecea8a320eeb19
 // Constructor
 Main_Menu::Main_Menu()
 {
