@@ -12,6 +12,7 @@
 #include <QModelIndex>
 #include <QMessageBox>
 #include <QHeaderView>
+#include <QDir>
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
@@ -44,7 +45,8 @@ public:
     void onPuzzleCompleted();
     void disableSelection();
     QImage getImage(int row, int column, int number);
-    QImage getFullImage(int number);
+
+    QImage *getFullImage(int number);
     QString ItoS(int number);
 
 public slots:

@@ -29,15 +29,16 @@ QString Browse_Screen::ItoS(int number)
 }
 
 // Gets the full image at the number specified.
-QImage Browse_Screen::getFullImage(int number){
+QImage *Browse_Screen::getFullImage(int number){
     if(number >= 0 && number < ALL_IMAGES){
-        QString str = "C:/Users/Joris/Documents/Puzzling_Collections/images/";
+        QString str = QDir::currentPath();
+        str += "/../Puzzling_Collections-master/images/";
         str += ItoS(number);
         str += ".jpg";
-        QImage image(str);
+        QImage *image = new QImage(str);
         return image;
     }
-    return QImage(NULL);
+    return NULL;
 }
 
 // Goes to one of the screens.
@@ -74,8 +75,8 @@ void Browse_Screen::onTableClicked(const QModelIndex &i)
     || (i.row() == 2 && i.column() == 1)
     || (i.row() == 2 && i.column() == 2)){
         clickedImage = (imgBlock*4)+(((i.row()-1)*2)+(i.column()-1));
-        QImage image = getFullImage(clickedImage);
-        if(image != QImage(NULL)){
+        QImage *image = getFullImage(clickedImage);
+        if(image != NULL){
             QPushButton *p1 = new QPushButton(tr("&Zoom"));
             QPushButton *p2 = new QPushButton(tr("&Puzzle"));
             QMessageBox box;
@@ -85,7 +86,7 @@ void Browse_Screen::onTableClicked(const QModelIndex &i)
             box.exec();
                 if(box.clickedButton() == p1){
                     QLabel *label = new QLabel();
-                    label->setPixmap(QPixmap::fromImage(image));
+                    label->setPixmap(QPixmap::fromImage(*image));
                     label->resize(1600,900);
                     label->show();
                 }
@@ -128,18 +129,20 @@ QStandardItemModel *Browse_Screen::createModel(){
 
     for(int i = imgBlock*4; i < (imgBlock*4)+4; i++){
         QStandardItem *item5 = new QStandardItem();
-        QImage image = getFullImage(i);
-        item5->setData(QVariant(QPixmap::fromImage(image)), Qt::DecorationRole);
-        item5->setData(QVariant(color), Qt::BackgroundRole);
-        item5->setSelectable(false);
-        if(i == imgBlock*4)
-            model->setItem(1, 1, item5);
-        else if(i == (imgBlock*4)+1)
-            model->setItem(1, 2, item5);
-        else if(i == (imgBlock*4)+2)
-            model->setItem(2, 1, item5);
-        else if(i == (imgBlock*4)+3)
-            model->setItem(2, 2, item5);
+        QImage *image = getFullImage(i);
+        if(image != NULL){
+            item5->setData(QVariant(QPixmap::fromImage(*image)), Qt::DecorationRole);
+            item5->setData(QVariant(color), Qt::BackgroundRole);
+            item5->setSelectable(false);
+            if(i == imgBlock*4)
+                model->setItem(1, 1, item5);
+            else if(i == (imgBlock*4)+1)
+                model->setItem(1, 2, item5);
+            else if(i == (imgBlock*4)+2)
+                model->setItem(2, 1, item5);
+            else if(i == (imgBlock*4)+3)
+                model->setItem(2, 2, item5);
+        }
     }
 
     for (int row = 0; row < 4; ++row) {

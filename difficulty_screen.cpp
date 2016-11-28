@@ -28,15 +28,16 @@ QString Difficulty_Screen::ItoS(int number)
 }
 
 // Gets the full image at the number specified.
-QImage Difficulty_Screen::getFullImage(int number){
+QImage *Difficulty_Screen::getFullImage(int number){
     if(number >= 0 && number < ALL_IMAGES){
-        QString str = "C:/Users/Joris/Documents/Puzzling_Collections/images/";
+        QString str = QDir::currentPath();
+        str += "/../Puzzling_Collections-master/images/";
         str += ItoS(number);
         str += ".jpg";
-        QImage image(str);
+        QImage *image = new QImage(str);
         return image;
     }
-    return QImage(NULL);
+    return NULL;
 }
 
 // Goes to one of the screens.
@@ -80,7 +81,7 @@ QStandardItemModel *Difficulty_Screen::createModel(){
     model->setItem(0, 2, item1);
 
     QStandardItem *item2 = new QStandardItem();
-    QImage image = getFullImage(clickedImage);
+    QImage image = *getFullImage(clickedImage);
     item2->setData(QVariant(QPixmap::fromImage(image)), Qt::DecorationRole);
     item2->setData(QVariant(color), Qt::BackgroundRole);
     item2->setSelectable(false);

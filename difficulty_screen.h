@@ -30,7 +30,7 @@ public:
     void toScreen(Screen s);
     QStandardItemModel *createModel();
     QString ItoS(int number);
-    QImage getFullImage(int number);
+    QImage *getFullImage(int number);
 
 public slots:
     void onTableClicked(const QModelIndex &i);

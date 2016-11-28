@@ -1,4 +1,5 @@
-#include "Puzzle.h"
+
+#include "puzzle.h"
 
 #define ALL_IMAGES 5
 
@@ -27,20 +28,23 @@ QString Puzzle::ItoS(int number)
 }
 
 // Gets the full image at the number specified.
-QImage Puzzle::getFullImage(int number){
+QImage *Puzzle::getFullImage(int number){
     if(number >= 0 && number < ALL_IMAGES){
-        QString str = "C:/Users/Joris/Documents/Puzzling_Collections/images/";
+        QString str = QDir::currentPath();
+        str += "/../Puzzling_Collections-master/images/";
         str += ItoS(number);
         str += ".jpg";
-        QImage image(str);
+        QImage *image = new QImage(str);
         return image;
     }
-    return QImage(NULL);
+    return NULL;
 }
 
 // Gets the initial image for the tile specified.
 QImage Puzzle::getImage(int row, int column, int number){
-    QString str = "C:/Users/Joris/Documents/Puzzling_Collections/images/";
+
+    QString str = QDir::currentPath();
+    str += "/../Puzzling_Collections-master/images/";
     str += ItoS(number);
     str += "/_";
     str += ItoS(row);
@@ -54,7 +58,7 @@ QImage Puzzle::getImage(int row, int column, int number){
 // Shows the full picture after the puzzle is completed.
 void Puzzle::onPuzzleCompleted(){
     QLabel *label = new QLabel();
-    QImage image = getFullImage(imgNumber);
+    QImage image = *getFullImage(imgNumber);
     label->setPixmap(QPixmap::fromImage(image));
     label->resize(1600,900);
     label->show();
