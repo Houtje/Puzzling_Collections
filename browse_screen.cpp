@@ -84,15 +84,15 @@ void Browse_Screen::onTableClicked(const QModelIndex &i)
             box.addButton(p2, QMessageBox::ActionRole);
             box.setText("What do you want to do with this picture?");
             box.exec();
-                if(box.clickedButton() == p1){
-                    QLabel *label = new QLabel();
-                    label->setPixmap(QPixmap::fromImage(*image));
-                    label->resize(1600,900);
-                    label->show();
-                }
-                else if(box.clickedButton() == p2){
-                    toScreen(SC_DIFF);
-                }
+            if(box.clickedButton() == p1){
+                QLabel *label = new QLabel();
+                label->setPixmap(QPixmap::fromImage(*image));
+                label->resize(1600,900);
+                label->show();
+            }
+            else if(box.clickedButton() == p2){
+                toScreen(SC_DIFF);
+            }
         }
     }
 }
