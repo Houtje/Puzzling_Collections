@@ -25,7 +25,7 @@ class Puzzle : public QObject
     Q_OBJECT
 
 protected:
-    struct empty{
+    struct Tile{
         int row;
         int column;
     } emp;
@@ -35,17 +35,18 @@ protected:
     std::vector<QImage> images;
     std::vector<QImage> fullPicture;
     int imgNumber;
+    bool hardMode;
+    bool solved[11];
 
 public:
     Puzzle();
     ~Puzzle();
-    void init(int number);
+    void initNM(int number, QImage *subPuzzle);
+    void initHM(int number);
     void swapWithEmpty(int row, int column);
     void randomConfig();
     void onPuzzleCompleted();
     void disableSelection();
-    QImage getImage(int row, int column, int number);
-
     QImage *getFullImage(int number);
     QString ItoS(int number);
 

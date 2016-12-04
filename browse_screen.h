@@ -11,7 +11,6 @@
 #include <QPalette>
 #include <QDialogButtonBox>
 #include <QPushButton>
-
 #include <QDir>
 
 
@@ -36,7 +35,6 @@ public:
     void toScreen(Screen s);
     QStandardItemModel *createModel();
     QString ItoS(int number);
-
     QImage *getFullImage(int number);
 
 public slots:

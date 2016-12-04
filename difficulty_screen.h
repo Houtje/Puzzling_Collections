@@ -17,7 +17,8 @@ class Difficulty_Screen : public QObject
 protected:
     enum Screen {
         SC_BROWSE,
-        SC_PUZZLE,
+        SC_PUZZLE_NM,
+        SC_PUZZLE_HM,
     };
     QTableView *table;
     QWidget *widget;

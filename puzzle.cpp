@@ -1,4 +1,3 @@
-
 #include "puzzle.h"
 
 #define ALL_IMAGES 5
@@ -11,6 +10,9 @@ Puzzle::Puzzle()
     table = NULL;
     widget = NULL;
     imgNumber = 0;
+    hardMode = false;
+    for(int i = 0; i < 10; i++)
+        solved[i] = false;
 }
 
 // Destructor
@@ -40,23 +42,11 @@ QImage *Puzzle::getFullImage(int number){
     return NULL;
 }
 
-// Gets the initial image for the tile specified.
-QImage Puzzle::getImage(int row, int column, int number){
-
-    QString str = QDir::currentPath();
-    str += "/../Puzzling_Collections-master/images/";
-    str += ItoS(number);
-    str += "/_";
-    str += ItoS(row);
-    str += "_";
-    str += ItoS(column);
-    str += ".png";
-    QImage image(str);
-    return image;
-}
-
 // Shows the full picture after the puzzle is completed.
 void Puzzle::onPuzzleCompleted(){
+    QMessageBox box;
+    box.setText("Congratulations, you solved the puzzle!");
+    box.exec();
     QLabel *label = new QLabel();
     QImage image = *getFullImage(imgNumber);
     label->setPixmap(QPixmap::fromImage(image));
@@ -125,39 +115,100 @@ void Puzzle::swapWithEmpty(int row, int column){
 // Swaps the tile if applicable.
 void Puzzle::onTableClicked(const QModelIndex &i)
 {
-    if((i.row() == emp.row-1 && i.column() == emp.column)
-    ||(i.row() == emp.row && i.column() == emp.column-1)
-    ||(i.row() == emp.row+1 && i.column() == emp.column)
-    ||(i.row() == emp.row && i.column() == emp.column+1)){
-        swapWithEmpty(i.row(), i.column());
-        if(images == fullPicture){
-            QMessageBox box;
-            box.setText("Congratulations, you solved the puzzle!");
-            box.exec();
-            onPuzzleCompleted();
+    if(!(i.row() == emp.row && i.column() == emp.column)
+    && !solved[i.row()*3 + i.column()] && hardMode){
+        Puzzle *p = new Puzzle();
+        p->initNM(imgNumber, new QImage(images[i.row()*3 + i.column()]));
+    }
+    else{
+        if((i.row() == emp.row-1 && i.column() == emp.column)
+        ||(i.row() == emp.row && i.column() == emp.column-1)
+        ||(i.row() == emp.row+1 && i.column() == emp.column)
+        ||(i.row() == emp.row && i.column() == emp.column+1)){
+            swapWithEmpty(i.row(), i.column());
+            if(images == fullPicture)
+                onPuzzleCompleted();
         }
     }
 }
 
-// Initializes the program with several values.
-void Puzzle::init(int number)
+// Initializes the normal mode with several values.
+void Puzzle::initNM(int number, QImage *subPuzzle)
 {
     imgNumber = number;
 
     widget = new QWidget();
 
     model = new QStandardItemModel(4,3);
+    QImage *img = getFullImage(number);
+    int h = img->height()/4;
+    int w = img->width()/3;
+    if(subPuzzle){
+        QImage newImg = subPuzzle->scaled(1600, 900);
+        *img = newImg;
+    }
     for (int row = 0; row < 4; ++row) {
         for (int column = 0; column < 3; ++column) {
-            QImage image = getImage(row, column, number);
-            images.push_back(image);
-            fullPicture.push_back(image);
-
             QStandardItem *item = new QStandardItem();
-            item->setData(QVariant(QPixmap::fromImage(image)), Qt::DecorationRole);
-            item->setSelectable(false);
-            if (row == 3 && column == 2)
+
+            QImage part = img->copy(w*column, h*row, w, h);
+            if(row == 3 && column == 2){
+                part.fill(QColor(255,255,255));
                 item->setEnabled(false);
+            }
+            images.push_back(part);
+            fullPicture.push_back(part);
+
+            item->setData(QVariant(QPixmap::fromImage(part)), Qt::DecorationRole);
+            item->setSelectable(false);
+            model->setItem(row, column, item);
+        }
+    }
+
+    randomConfig();
+
+    table = new QTableView(widget);
+    table->setModel(model);
+    table->verticalHeader()->hide();
+    table->horizontalHeader()->hide();
+    table->resizeColumnsToContents();
+    table->resizeRowsToContents();
+    table->resize(1625,915);
+
+    this->connect(table, SIGNAL(clicked(QModelIndex)), SLOT(onTableClicked(QModelIndex)));
+
+    widget->setWindowTitle("Puzzling Collections");
+    widget->resize(1625,915);
+    widget->show();
+}
+
+// Initializes the hard mode with several values.
+void Puzzle::initHM(int number)
+{
+    imgNumber = number;
+
+    hardMode = true;
+
+    widget = new QWidget();
+
+    model = new QStandardItemModel(4,3);
+    QImage *img = getFullImage(number);
+    int h = img->height()/4;
+    int w = img->width()/3;
+    for (int row = 0; row < 4; ++row) {
+        for (int column = 0; column < 3; ++column) {
+            QStandardItem *item = new QStandardItem();
+
+            QImage part = img->copy(w*column, h*row, w, h);
+            if(row == 3 && column == 2){
+                part.fill(QColor(255,255,255));
+                item->setEnabled(false);
+            }
+            images.push_back(part);
+            fullPicture.push_back(part);
+
+            item->setData(QVariant(QPixmap::fromImage(part)), Qt::DecorationRole);
+            item->setSelectable(false);
             model->setItem(row, column, item);
         }
     }

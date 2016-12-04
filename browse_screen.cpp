@@ -6,6 +6,8 @@
 
 #define ALL_IMAGES 5
 
+QTextStream out(stdout);
+
 // Constructor
 Browse_Screen::Browse_Screen(int block)
 {
@@ -131,9 +133,11 @@ QStandardItemModel *Browse_Screen::createModel(){
         QStandardItem *item5 = new QStandardItem();
         QImage *image = getFullImage(i);
         if(image != NULL){
+            *image = image->scaled(image->width()/3, image->height()/4);
             item5->setData(QVariant(QPixmap::fromImage(*image)), Qt::DecorationRole);
             item5->setData(QVariant(color), Qt::BackgroundRole);
             item5->setSelectable(false);
+
             if(i == imgBlock*4)
                 model->setItem(1, 1, item5);
             else if(i == (imgBlock*4)+1)

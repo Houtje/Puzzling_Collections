@@ -2,6 +2,7 @@
 #include "help_screen.h"
 #include "browse_screen.h"
 #include "puzzle.h"
+#include "difficulty_screen.h"
 
 #define ALL_IMAGES 5
 
@@ -32,12 +33,31 @@ void Main_Menu::toScreen(Screen s){
         } break;
         case SC_SELECT: {
             Puzzle *p = new Puzzle();
-            p->init(0);
+            QPushButton *p1 = new QPushButton(tr("&Normal Mode"));
+            QPushButton *p2 = new QPushButton(tr("&Hard Mode"));
+            QMessageBox box;
+            box.addButton(p1, QMessageBox::ActionRole);
+            box.addButton(p2, QMessageBox::ActionRole);
+            box.setText("What mode would you like to play?");
+            box.exec();
+            if(box.clickedButton() == p1)
+                p->initNM(0, NULL);
+            else if(box.clickedButton() == p2)
+                p->initHM(0);
         } break;
         case SC_QUICK: {
             Puzzle *p = new Puzzle();
-            srand(time(NULL));
-            p->init(rand() % ALL_IMAGES);
+            QPushButton *p1 = new QPushButton(tr("&Normal Mode"));
+            QPushButton *p2 = new QPushButton(tr("&Hard Mode"));
+            QMessageBox box;
+            box.addButton(p1, QMessageBox::ActionRole);
+            box.addButton(p2, QMessageBox::ActionRole);
+            box.setText("What mode would you like to play?");
+            box.exec();
+            if(box.clickedButton() == p1)
+                p->initNM(rand() % ALL_IMAGES, NULL);
+            else if(box.clickedButton() == p2)
+                p->initHM(rand() % ALL_IMAGES);
         } break;
     }
 }

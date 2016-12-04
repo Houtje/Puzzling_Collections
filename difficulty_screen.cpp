@@ -48,9 +48,13 @@ void Difficulty_Screen::toScreen(Screen s){
             b->init();
             widget->close();
         } break;
-        case SC_PUZZLE: {
+        case SC_PUZZLE_NM: {
             Puzzle *p = new Puzzle();
-            p->init(clickedImage);
+            p->initNM(clickedImage, NULL);
+        } break;
+        case SC_PUZZLE_HM: {
+            Puzzle *p = new Puzzle();
+            p->initHM(clickedImage);
         } break;
     }
 }
@@ -61,9 +65,9 @@ void Difficulty_Screen::onTableClicked(const QModelIndex &i)
     if(i.row() == 0 && i.column() == 2)
         toScreen(SC_BROWSE);
     if(i.row() == 2 && i.column() == 0)
-        toScreen(SC_PUZZLE);
+        toScreen(SC_PUZZLE_NM);
     if(i.row() == 2 && i.column() == 1)
-        toScreen(SC_PUZZLE);
+        toScreen(SC_PUZZLE_HM);
 }
 
 // Creates the browse screen model to be used in the table.
@@ -82,6 +86,7 @@ QStandardItemModel *Difficulty_Screen::createModel(){
 
     QStandardItem *item2 = new QStandardItem();
     QImage image = *getFullImage(clickedImage);
+    image = image.scaled(image.width()/3, image.height()/4);
     item2->setData(QVariant(QPixmap::fromImage(image)), Qt::DecorationRole);
     item2->setData(QVariant(color), Qt::BackgroundRole);
     item2->setSelectable(false);
@@ -127,10 +132,8 @@ QStandardItemModel *Difficulty_Screen::createModel(){
             model->setItem(row, column, item);
         }
     }
-
     return model;
 }
-
 
 // Initializes the browse screen.
 void Difficulty_Screen::init(){
