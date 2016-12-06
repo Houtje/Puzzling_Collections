@@ -116,15 +116,14 @@ QStandardItemModel *Help_Screen::createModel(){
     QFont font4;
     font4.setPixelSize(20);
     item6->setFont(font4);
-    item6->setText("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor."
-                   "Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
-                   "Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.");
+    item6->setText("The Puzzling Collections program is designed to give you a fun time with some wonderful images from the Naturalis depositories.\n"
+                   "These images can be shown on the screen by browsing and clicking them.\nThey can also be used to play a 3x4 slide puzzle with.");
     model->setItem(1, 1, item6);
 
     QStandardItem *item7 = item6->clone();
-    item7->setText("Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. "
-                   "In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. "
-                   "Integer tincidunt. Cras dapibus.");
+    item7->setText("By clicking browse you will be able to see all pictures.\n"
+                   "Clicking select and play will allow you to browse through the collection and start a puzzle.\n"
+                   "By selecting quick puzzle you will immediately start a puzzle with a random image.");
     model->setItem(2, 1, item7);
 
     for (int row = 0; row < 4; ++row) {
