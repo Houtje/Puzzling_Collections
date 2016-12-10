@@ -32,18 +32,9 @@ void Help_Screen::toScreen(Screen s){
             widget->close();
         } break;
         case SC_SELECT: {
-            Puzzle *p = new Puzzle();
-            QPushButton *p1 = new QPushButton(tr("&Normal Mode"));
-            QPushButton *p2 = new QPushButton(tr("&Hard Mode"));
-            QMessageBox box;
-            box.addButton(p1, QMessageBox::ActionRole);
-            box.addButton(p2, QMessageBox::ActionRole);
-            box.setText("What mode would you like to play?");
-            box.exec();
-            if(box.clickedButton() == p1)
-                p->initNM(0, NULL);
-            else if(box.clickedButton() == p2)
-                p->initHM(0);
+            Browse_Screen *b = new Browse_Screen(0);
+            b->init();
+            widget->close();
         } break;
         case SC_QUICK: {
             Puzzle *p = new Puzzle();
