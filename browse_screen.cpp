@@ -104,6 +104,11 @@ void Browse_Screen::onTableClicked(const QModelIndex &i)
 
 // Creates the browse screen model to be used in the table.
 QStandardItemModel *Browse_Screen::createModel(){
+    QMessageBox *box = new QMessageBox();
+    box->setText("Loading Pictures, please wait...");
+    box->show();
+    QCoreApplication::processEvents();
+
     QStandardItemModel *model = new QStandardItemModel(4,3);
     QColor color(0,0,255,50);
 
@@ -166,6 +171,8 @@ QStandardItemModel *Browse_Screen::createModel(){
         }
     }
 
+    box->close();
+
     return model;
 }
 
@@ -175,6 +182,7 @@ void Browse_Screen::init(){
     widget = new QWidget();
 
     table = new QTableView(widget);
+
     table->setModel(createModel());
     table->verticalHeader()->hide();
     table->horizontalHeader()->hide();
@@ -196,5 +204,6 @@ void Browse_Screen::init(){
 
     widget->setWindowTitle("Puzzling Collections");
     widget->resize(SCREEN_W,SCREEN_H-1);
+
     widget->show();
 }

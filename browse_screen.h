@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTableView>
 #include <QStandardItemModel>
+#include <QCoreApplication>
 #include <QWidget>
 #include <QModelIndex>
 #include <QFont>
