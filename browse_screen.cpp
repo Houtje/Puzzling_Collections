@@ -4,7 +4,9 @@
 #include "puzzle.h"
 #include "difficulty_screen.h"
 
-#define ALL_IMAGES 5
+#define ALL_IMAGES 11
+#define SCREEN_H 900
+#define SCREEN_W 1600
 
 QTextStream out(stdout);
 
@@ -34,9 +36,9 @@ QString Browse_Screen::ItoS(int number)
 QImage *Browse_Screen::getFullImage(int number){
     if(number >= 0 && number < ALL_IMAGES){
         QString str = QDir::currentPath();
-        str += "/../Puzzling_Collections-master/images/";
+        str += "/../Naturalis/";
         str += ItoS(number);
-        str += ".jpg";
+        str += ".png";
         QImage *image = new QImage(str);
         return image;
     }
@@ -87,9 +89,10 @@ void Browse_Screen::onTableClicked(const QModelIndex &i)
             box.setText("What do you want to do with this picture?");
             box.exec();
             if(box.clickedButton() == p1){
+                *image = image->scaled(SCREEN_W, SCREEN_H);
                 QLabel *label = new QLabel();
                 label->setPixmap(QPixmap::fromImage(*image));
-                label->resize(1600,900);
+                label->resize(SCREEN_W,SCREEN_H);
                 label->show();
             }
             else if(box.clickedButton() == p2){
@@ -133,7 +136,7 @@ QStandardItemModel *Browse_Screen::createModel(){
         QStandardItem *item5 = new QStandardItem();
         QImage *image = getFullImage(i);
         if(image != NULL){
-            *image = image->scaled(image->width()/3, image->height()/4);
+            *image = image->scaled(SCREEN_W/3, SCREEN_H/4);
             item5->setData(QVariant(QPixmap::fromImage(*image)), Qt::DecorationRole);
             item5->setData(QVariant(color), Qt::BackgroundRole);
             item5->setSelectable(false);
@@ -180,7 +183,7 @@ void Browse_Screen::init(){
        table->setRowHeight(i, 225);
     for(int i = 0; i < 3; i++)
        table->setColumnWidth(i, 533);
-    table->resize(1625,914);
+    table->resize(SCREEN_W+25,SCREEN_H+14);
 
     QPalette palette = table->palette();
     QColor color(0,0,255,50);
@@ -192,6 +195,6 @@ void Browse_Screen::init(){
     this->connect(table, SIGNAL(clicked(QModelIndex)), SLOT(onTableClicked(QModelIndex)));
 
     widget->setWindowTitle("Puzzling Collections");
-    widget->resize(1600,899);
+    widget->resize(SCREEN_W,SCREEN_H-1);
     widget->show();
 }

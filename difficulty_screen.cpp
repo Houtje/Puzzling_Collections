@@ -4,7 +4,9 @@
 #include "puzzle.h"
 #include "browse_screen.h"
 
-#define ALL_IMAGES 5
+#define ALL_IMAGES 11
+#define SCREEN_H 900
+#define SCREEN_W 1600
 
 // Constructor
 Difficulty_Screen::Difficulty_Screen(int image)
@@ -30,10 +32,9 @@ QString Difficulty_Screen::ItoS(int number)
 // Gets the full image at the number specified.
 QImage *Difficulty_Screen::getFullImage(int number){
     if(number >= 0 && number < ALL_IMAGES){
-        QString str = QDir::currentPath();
-        str += "/../Puzzling_Collections-master/images/";
+        QString str = QDir::currentPath() + "/../Naturalis/";
         str += ItoS(number);
-        str += ".jpg";
+        str += ".png";
         QImage *image = new QImage(str);
         return image;
     }
@@ -86,7 +87,7 @@ QStandardItemModel *Difficulty_Screen::createModel(){
 
     QStandardItem *item2 = new QStandardItem();
     QImage image = *getFullImage(clickedImage);
-    image = image.scaled(image.width()/3, image.height()/4);
+    image = image.scaled(SCREEN_W/3, SCREEN_H/4);
     item2->setData(QVariant(QPixmap::fromImage(image)), Qt::DecorationRole);
     item2->setData(QVariant(color), Qt::BackgroundRole);
     item2->setSelectable(false);
@@ -148,7 +149,7 @@ void Difficulty_Screen::init(){
        table->setRowHeight(i, 225);
     for(int i = 0; i < 3; i++)
        table->setColumnWidth(i, 533);
-    table->resize(1625,914);
+    table->resize(SCREEN_W+25,SCREEN_H+14);
 
     QPalette palette = table->palette();
     QColor color(0,0,255,50);
@@ -160,6 +161,6 @@ void Difficulty_Screen::init(){
     this->connect(table, SIGNAL(clicked(QModelIndex)), SLOT(onTableClicked(QModelIndex)));
 
     widget->setWindowTitle("Puzzling Collections");
-    widget->resize(1600,899);
+    widget->resize(SCREEN_W,SCREEN_H-1);
     widget->show();
 }

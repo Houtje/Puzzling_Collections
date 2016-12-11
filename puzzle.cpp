@@ -1,6 +1,8 @@
 #include "puzzle.h"
 
-#define ALL_IMAGES 5
+#define ALL_IMAGES 11
+#define SCREEN_H 900
+#define SCREEN_W 1600
 
 // Constructor
 Puzzle::Puzzle()
@@ -32,10 +34,9 @@ QString Puzzle::ItoS(int number)
 // Gets the full image at the number specified.
 QImage *Puzzle::getFullImage(int number){
     if(number >= 0 && number < ALL_IMAGES){
-        QString str = QDir::currentPath();
-        str += "/../Puzzling_Collections-master/images/";
+        QString str = QDir::currentPath() + "/../Naturalis/";
         str += ItoS(number);
-        str += ".jpg";
+        str += ".png";
         QImage *image = new QImage(str);
         return image;
     }
@@ -49,8 +50,9 @@ void Puzzle::onPuzzleCompleted(){
     box.exec();
     QLabel *label = new QLabel();
     QImage image = *getFullImage(imgNumber);
+    image = image.scaled(SCREEN_W, SCREEN_H);
     label->setPixmap(QPixmap::fromImage(image));
-    label->resize(1600,900);
+    label->resize(SCREEN_W, SCREEN_H);
     label->show();
     widget->close();
 }
@@ -144,7 +146,7 @@ void Puzzle::initNM(int number, QImage *subPuzzle)
     int h = img->height()/4;
     int w = img->width()/3;
     if(subPuzzle){
-        QImage newImg = subPuzzle->scaled(1600, 900);
+        QImage newImg = subPuzzle->scaled(SCREEN_W, SCREEN_H);;
         *img = newImg;
     }
     for (int row = 0; row < 4; ++row) {
@@ -152,6 +154,7 @@ void Puzzle::initNM(int number, QImage *subPuzzle)
             QStandardItem *item = new QStandardItem();
 
             QImage part = img->copy(w*column, h*row, w, h);
+            part = part.scaled(SCREEN_W/3, SCREEN_H/4);
             if(row == 3 && column == 2){
                 part.fill(QColor(255,255,255));
                 item->setEnabled(false);
@@ -173,12 +176,12 @@ void Puzzle::initNM(int number, QImage *subPuzzle)
     table->horizontalHeader()->hide();
     table->resizeColumnsToContents();
     table->resizeRowsToContents();
-    table->resize(1625,915);
+    table->resize(SCREEN_W+25, SCREEN_H+15);
 
     this->connect(table, SIGNAL(clicked(QModelIndex)), SLOT(onTableClicked(QModelIndex)));
 
     widget->setWindowTitle("Puzzling Collections");
-    widget->resize(1625,915);
+    widget->resize(SCREEN_W+25, SCREEN_H+15);
     widget->show();
 }
 
@@ -221,11 +224,11 @@ void Puzzle::initHM(int number)
     table->horizontalHeader()->hide();
     table->resizeColumnsToContents();
     table->resizeRowsToContents();
-    table->resize(1625,915);
+    table->resize(SCREEN_W+25, SCREEN_H+15);
 
     this->connect(table, SIGNAL(clicked(QModelIndex)), SLOT(onTableClicked(QModelIndex)));
 
     widget->setWindowTitle("Puzzling Collections");
-    widget->resize(1625,915);
+    widget->resize(SCREEN_W+25, SCREEN_H+15);
     widget->show();
 }
