@@ -18,14 +18,16 @@ SOURCES += main.cpp \
     main_menu.cpp \
     help_screen.cpp \
     browse_screen.cpp \
-    difficulty_screen.cpp
+    difficulty_screen.cpp \
+    select_and_play.cpp
 
 HEADERS  += \
     puzzle.h \
     main_menu.h \
     help_screen.h \
     browse_screen.h \
-    difficulty_screen.h
+    difficulty_screen.h \
+    select_and_play.h
 
 FORMS    +=
 

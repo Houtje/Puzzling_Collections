@@ -188,7 +188,10 @@ void Puzzle::initNM(int number, QImage *subPuzzle)
 // Initializes the hard mode with several values.
 void Puzzle::initHM(int number)
 {
-    imgNumber = number;
+    QMessageBox *box = new QMessageBox();
+    box->setText("Hard Mode is not implemented yet.\nPlease try the Normal Mode!");
+    box->exec();
+    /* imgNumber = number;
 
     hardMode = true;
 
@@ -230,5 +233,5 @@ void Puzzle::initHM(int number)
 
     widget->setWindowTitle("Puzzling Collections");
     widget->resize(SCREEN_W+25, SCREEN_H+15);
-    widget->show();
+    widget->show();*/
 }

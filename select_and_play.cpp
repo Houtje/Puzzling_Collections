@@ -1,18 +1,16 @@
-#include "browse_screen.h"
+#include "select_and_play.h"
 #include "help_screen.h"
 #include "main_menu.h"
 #include "puzzle.h"
+#include "browse_screen.h"
 #include "difficulty_screen.h"
-#include "select_and_play.h"
 
 #define ALL_IMAGES 11
 #define SCREEN_H 900
 #define SCREEN_W 1600
 
-QTextStream out(stdout);
-
 // Constructor
-Browse_Screen::Browse_Screen(int block)
+Select_And_Play::Select_And_Play(int block)
 {
     table = NULL;
     widget = NULL;
@@ -21,12 +19,12 @@ Browse_Screen::Browse_Screen(int block)
 }
 
 // Destructor
-Browse_Screen::~Browse_Screen(){
+Select_And_Play::~Select_And_Play(){
 
 }
 
 // Converts an integer to a string.
-QString Browse_Screen::ItoS(int number)
+QString Select_And_Play::ItoS(int number)
 {
   std::ostringstream oss;
   oss << number;
@@ -34,7 +32,7 @@ QString Browse_Screen::ItoS(int number)
 }
 
 // Gets the full image at the number specified.
-QImage *Browse_Screen::getFullImage(int number){
+QImage *Select_And_Play::getFullImage(int number){
     if(number >= 0 && number < ALL_IMAGES){
         QString str = QDir::currentPath();
         str += "/../Naturalis/";
@@ -47,7 +45,7 @@ QImage *Browse_Screen::getFullImage(int number){
 }
 
 // Goes to one of the screens.
-void Browse_Screen::toScreen(Screen s){
+void Select_And_Play::toScreen(Screen s){
     switch(s){
         case SC_MAIN: {
             Main_Menu *m = new Main_Menu();
@@ -63,7 +61,7 @@ void Browse_Screen::toScreen(Screen s){
 }
 
 // Starts several subprograms.
-void Browse_Screen::onTableClicked(const QModelIndex &i)
+void Select_And_Play::onTableClicked(const QModelIndex &i)
 {
     if(i.row() == 0 && i.column() == 2)
         toScreen(SC_MAIN);
@@ -82,17 +80,29 @@ void Browse_Screen::onTableClicked(const QModelIndex &i)
         clickedImage = (imgBlock*4)+(((i.row()-1)*2)+(i.column()-1));
         QImage *image = getFullImage(clickedImage);
         if(image != NULL){
-            *image = image->scaled(SCREEN_W, SCREEN_H);
-            QLabel *label = new QLabel();
-            label->setPixmap(QPixmap::fromImage(*image));
-            label->resize(SCREEN_W,SCREEN_H);
-            label->show();
+            QPushButton *p1 = new QPushButton(tr("&Zoom"));
+            QPushButton *p2 = new QPushButton(tr("&Puzzle"));
+            QMessageBox box;
+            box.addButton(p1, QMessageBox::ActionRole);
+            box.addButton(p2, QMessageBox::ActionRole);
+            box.setText("What do you want to do with this picture?");
+            box.exec();
+            if(box.clickedButton() == p1){
+                *image = image->scaled(SCREEN_W, SCREEN_H);
+                QLabel *label = new QLabel();
+                label->setPixmap(QPixmap::fromImage(*image));
+                label->resize(SCREEN_W,SCREEN_H);
+                label->show();
+            }
+            else if(box.clickedButton() == p2){
+                toScreen(SC_DIFF);
+            }
         }
     }
 }
 
 // Creates the browse screen model to be used in the table.
-QStandardItemModel *Browse_Screen::createModel(){
+QStandardItemModel *Select_And_Play::createModel(){
     QMessageBox *box = new QMessageBox();
     box->setText("Loading pictures, please wait...");
     box->show();
@@ -123,7 +133,7 @@ QStandardItemModel *Browse_Screen::createModel(){
     font2.setPixelSize(50);
     font2.setItalic(true);
     item4->setFont(font2);
-    item4->setText("Puzzling Collections Browse Screen");
+    item4->setText("Puzzling Collections Select and Play");
     model->setItem(0, 1, item4);
 
     for(int i = imgBlock*4; i < (imgBlock*4)+4; i++){
@@ -167,7 +177,7 @@ QStandardItemModel *Browse_Screen::createModel(){
 
 
 // Initializes the browse screen.
-void Browse_Screen::init(){
+void Select_And_Play::init(){
     widget = new QWidget();
 
     table = new QTableView(widget);

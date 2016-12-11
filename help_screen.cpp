@@ -3,6 +3,7 @@
 #include "main_menu.h"
 #include "puzzle.h"
 #include "difficulty_screen.h"
+#include "select_and_play.h"
 
 #define ALL_IMAGES 11
 #define SCREEN_H 900
@@ -34,12 +35,13 @@ void Help_Screen::toScreen(Screen s){
             widget->close();
         } break;
         case SC_SELECT: {
-            Browse_Screen *b = new Browse_Screen(0);
+            Select_And_Play *b = new Select_And_Play(0);
             b->init();
             widget->close();
         } break;
         case SC_QUICK: {
             Puzzle *p = new Puzzle();
+            /*
             QPushButton *p1 = new QPushButton(tr("&Normal Mode"));
             QPushButton *p2 = new QPushButton(tr("&Hard Mode"));
             QMessageBox box;
@@ -48,9 +50,12 @@ void Help_Screen::toScreen(Screen s){
             box.setText("What mode would you like to play?");
             box.exec();
             if(box.clickedButton() == p1)
+             */
                 p->initNM(rand() % ALL_IMAGES, NULL);
+            /*
             else if(box.clickedButton() == p2)
                 p->initHM(rand() % ALL_IMAGES);
+             */
         } break;
     }
 }
@@ -109,12 +114,12 @@ QStandardItemModel *Help_Screen::createModel(){
     QFont font4;
     font4.setPixelSize(20);
     item6->setFont(font4);
-    item6->setText("The Puzzling Collections program is designed to give you a fun time with some wonderful images from the Naturalis depositories.\n"
-                   "These images can be shown on the screen by browsing and clicking them.\nThey can also be used to play a 3x4 slide puzzle with.");
+    item6->setText("\"Puzzling Collections\" is a program designed to give you a fun time puzzling with wonderful images from the Naturalis depositories.\n"
+                   "These images can be shown on the screen by browsing and clicking them. Also, you can also play a slide puzzle which is the main focus of the program.");
     model->setItem(1, 1, item6);
 
     QStandardItem *item7 = item6->clone();
-    item7->setText("By clicking browse you will be able to see all pictures.\n"
+    item7->setText("By clicking browse you can browse through all available pictures.\n"
                    "Clicking select and play will allow you to browse through the collection and start a puzzle.\n"
                    "By selecting quick puzzle you will immediately start a puzzle with a random image.");
     model->setItem(2, 1, item7);

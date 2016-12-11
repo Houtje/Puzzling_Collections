@@ -1,6 +1,7 @@
 #include "main_menu.h"
 #include "help_screen.h"
 #include "browse_screen.h"
+#include "select_and_play.h"
 #include "puzzle.h"
 #include "difficulty_screen.h"
 
@@ -34,12 +35,13 @@ void Main_Menu::toScreen(Screen s){
             widget->close();
         } break;
         case SC_SELECT: {
-            Browse_Screen *b = new Browse_Screen(0);
-            b->init();
+            Select_And_Play *s = new Select_And_Play(0);
+            s->init();
             widget->close();
         } break;
         case SC_QUICK: {
             Puzzle *p = new Puzzle();
+            /*
             QPushButton *p1 = new QPushButton(tr("&Normal Mode"));
             QPushButton *p2 = new QPushButton(tr("&Hard Mode"));
             QMessageBox box;
@@ -48,9 +50,12 @@ void Main_Menu::toScreen(Screen s){
             box.setText("What mode would you like to play?");
             box.exec();
             if(box.clickedButton() == p1)
+             */
                 p->initNM(rand() % ALL_IMAGES, NULL);
+            /*
             else if(box.clickedButton() == p2)
                 p->initHM(rand() % ALL_IMAGES);
+             */
         } break;
     }
 }

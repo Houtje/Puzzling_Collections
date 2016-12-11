@@ -3,6 +3,7 @@
 #include "main_menu.h"
 #include "puzzle.h"
 #include "browse_screen.h"
+#include "select_and_play.h"
 
 #define ALL_IMAGES 11
 #define SCREEN_H 900
