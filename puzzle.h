@@ -13,6 +13,7 @@
 #include <QMessageBox>
 #include <QHeaderView>
 #include <QDir>
+#include <QKeyEvent>
 #include <cstdlib>
 #include <iostream>
 #include <sstream>

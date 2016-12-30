@@ -4,10 +4,13 @@
 #include "puzzle.h"
 #include "browse_screen.h"
 #include "select_and_play.h"
+#include "windows.h"
 
 #define ALL_IMAGES 11
-#define SCREEN_H 900
-#define SCREEN_W 1600
+#define SCREEN_H 1080
+#define SCREEN_W 1920
+// #define SCREEN_H 4305
+// #define SCREEN_W 5745
 
 // Constructor
 Difficulty_Screen::Difficulty_Screen(int image)
@@ -33,7 +36,8 @@ QString Difficulty_Screen::ItoS(int number)
 // Gets the full image at the number specified.
 QImage *Difficulty_Screen::getFullImage(int number){
     if(number >= 0 && number < ALL_IMAGES){
-        QString str = QDir::currentPath() + "/../Naturalis/";
+        QString str = QDir::currentPath();
+        str += "/../../../../Naturalis/";
         str += ItoS(number);
         str += ".png";
         QImage *image = new QImage(str);
@@ -53,6 +57,7 @@ void Difficulty_Screen::toScreen(Screen s){
         case SC_PUZZLE_NM: {
             Puzzle *p = new Puzzle();
             p->initNM(clickedImage, NULL);
+            widget->close();
         } break;
         case SC_PUZZLE_HM: {
             Puzzle *p = new Puzzle();
@@ -145,12 +150,11 @@ void Difficulty_Screen::init(){
     table->setModel(createModel());
     table->verticalHeader()->hide();
     table->horizontalHeader()->hide();
-
     for(int i = 0; i < 4; i++)
-       table->setRowHeight(i, 225);
+        table->setRowHeight(i, SCREEN_H/4);
     for(int i = 0; i < 3; i++)
-       table->setColumnWidth(i, 533);
-    table->resize(SCREEN_W+25,SCREEN_H+14);
+        table->setColumnWidth(i, SCREEN_W/3);
+    table->resize(SCREEN_W, SCREEN_H);
 
     QPalette palette = table->palette();
     QColor color(0,0,255,50);
@@ -162,6 +166,23 @@ void Difficulty_Screen::init(){
     this->connect(table, SIGNAL(clicked(QModelIndex)), SLOT(onTableClicked(QModelIndex)));
 
     widget->setWindowTitle("Puzzling Collections");
-    widget->resize(SCREEN_W,SCREEN_H-1);
+    widget->resize(SCREEN_W,SCREEN_H);
+    widget->setWindowState(Qt::WindowFullScreen);
     widget->show();
+    INPUT ip;
+
+    // Set up a generic keyboard event.
+    ip.type = INPUT_KEYBOARD;
+    ip.ki.wScan = 0; // hardware scan code for key
+    ip.ki.time = 0;
+    ip.ki.dwExtraInfo = 0;
+
+    // Press the "A" key
+    ip.ki.wVk = 0x91; // virtual-key code for the "a" key
+    ip.ki.dwFlags = 0; // 0 for key press
+    SendInput(1, &ip, sizeof(INPUT));
+
+    // Release the "A" key
+    ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+    SendInput(1, &ip, sizeof(INPUT));
 }

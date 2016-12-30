@@ -7,6 +7,8 @@
 #include <QWidget>
 #include <QModelIndex>
 #include <QFont>
+#include <QKeyEvent>
+#include <QEvent>
 #include <QColor>
 #include <QPalette>
 #include <time.h>
