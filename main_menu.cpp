@@ -68,66 +68,31 @@ void Main_Menu::onTableClicked(const QModelIndex &i)
 {
     if(i.row() == 0 && i.column() == 2)
         toScreen(SC_HELP);
-    else if(i.row() == 2 && i.column() == 0){
-        toScreen(SC_BROWSE);
-    }
-    else if(i.row() == 2 && i.column() == 1)
+    else if(i.row() == 3 && i.column() == 0)
         toScreen(SC_SELECT);
-    else if(i.row() == 2 && i.column() == 2)
+    else if(i.row() == 3 && i.column() == 2)
         toScreen(SC_QUICK);
 }
 
 // Creates the main menu model to be used in the table.
 QStandardItemModel *Main_Menu::createModel(){
     QStandardItemModel *model = new QStandardItemModel(4,3);
-    QColor color(0,0,255,50);
-
-    QStandardItem *item1 = new QStandardItem();
-    QFont font1;
-    font1.setPixelSize(50);
-    item1->setFont(font1);
-    item1->setTextAlignment(Qt::AlignCenter);
-    item1->setData(QVariant(color), Qt::BackgroundRole);
-    item1->setText("Browse");
-    model->setItem(2, 0, item1);
-
-    QStandardItem *item2 = item1->clone();
-    item2->setText("Select and Play");
-    model->setItem(2, 1, item2);
-
-    QStandardItem *item3 = item1->clone();
-    item3->setText("Quick Puzzle");
-    model->setItem(2, 2, item3);
-
-    QStandardItem *item4 = item1->clone();
-    QFont font2;
-    font2.setPixelSize(100);
-    item4->setFont(font2);
-    item4->setText("?");
-    model->setItem(0, 2, item4);
-
-    QStandardItem *item5 = item1->clone();
-    QFont font3;
-    font3.setPixelSize(50);
-    font3.setItalic(true);
-    item5->setFont(font3);
-    item5->setText("Puzzling Collections Main Menu");
-    model->setItem(0, 1, item5);
-
+    QString str = QDir::currentPath();
+    str += "/../Puzzling_Collections-master/Background.png";
+    QImage *image = new QImage(str);
+    int h = image->height()/4;
+    int w = image->width()/3;
     for (int row = 0; row < 4; ++row) {
         for (int column = 0; column < 3; ++column) {
-            QStandardItem *item;
-            if(model->item(row, column) == NULL){
-                item = new QStandardItem();
-                item->setData(QVariant(color), Qt::BackgroundRole);
-            }
-            else
-                item = model->item(row, column)->clone();
+            QStandardItem *item = new QStandardItem();
+            QImage part = image->copy(w*column, h*row, w, h);
+            part = part.scaled(SCREEN_W/3, SCREEN_H/4);
+            QBrush *brush = new QBrush(part);
+            item->setBackground(*brush);
             item->setSelectable(false);
             model->setItem(row, column, item);
         }
     }
-
     return model;
 }
 
@@ -152,6 +117,9 @@ void Main_Menu::init(){
            palette.setBrush(QPalette::HighlightedText,QBrush(Qt::black));
            table->setPalette(palette);
            table->setFocusPolicy(Qt::NoFocus);
+           table->setShowGrid(false);
+           table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+           table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
            this->connect(table, SIGNAL(clicked(QModelIndex)), SLOT(onTableClicked(QModelIndex)));
 

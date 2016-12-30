@@ -79,68 +79,22 @@ void Help_Screen::onTableClicked(const QModelIndex &i)
 // Creates the help screen model to be used in the table.
 QStandardItemModel *Help_Screen::createModel(){
     QStandardItemModel *model = new QStandardItemModel(4,3);
-    QColor color(0,0,255,50);
-
-    QStandardItem *item1 = new QStandardItem();
-    QFont font1;
-    font1.setPixelSize(50);
-    item1->setFont(font1);
-    item1->setTextAlignment(Qt::AlignCenter);
-    item1->setData(QVariant(color), Qt::BackgroundRole);
-    item1->setText("Browse");
-    model->setItem(3, 0, item1);
-
-    QStandardItem *item2 = item1->clone();
-    item2->setText("Select and Play");
-    model->setItem(3, 1, item2);
-
-    QStandardItem *item3 = item1->clone();
-    item3->setText("Quick Puzzle");
-    model->setItem(3, 2, item3);
-
-    QStandardItem *item4 = item1->clone();
-    QFont font2;
-    font2.setPixelSize(100);
-    item4->setFont(font2);
-    item4->setText("<-");
-    model->setItem(0, 2, item4);
-
-    QStandardItem *item5 = item1->clone();
-    QFont font3;
-    font3.setPixelSize(50);
-    font3.setItalic(true);
-    item5->setFont(font3);
-    item5->setText("Puzzling Collections Help Screen");
-    model->setItem(0, 1, item5);
-
-    QStandardItem *item6 = item1->clone();
-    QFont font4;
-    font4.setPixelSize(20);
-    item6->setFont(font4);
-    item6->setText("\"Puzzling Collections\" is a program designed to give you a fun time puzzling with wonderful images from the Naturalis depositories.\n"
-                   "These images can be shown on the screen by browsing and clicking them. Also, you can also play a slide puzzle which is the main focus of the program.");
-    model->setItem(1, 1, item6);
-
-    QStandardItem *item7 = item6->clone();
-    item7->setText("By clicking browse you can browse through all available pictures.\n"
-                   "Clicking select and play will allow you to browse through the collection and start a puzzle.\n"
-                   "By selecting quick puzzle you will immediately start a puzzle with a random image.");
-    model->setItem(2, 1, item7);
-
+    QString str = QDir::currentPath();
+    str += "/../Puzzling_Collections-master/BackgroundHelp.png";
+    QImage *image = new QImage(str);
+    int h = image->height()/4;
+    int w = image->width()/3;
     for (int row = 0; row < 4; ++row) {
         for (int column = 0; column < 3; ++column) {
-            QStandardItem *item;
-            if(model->item(row, column) == NULL){
-                item = new QStandardItem();
-                item->setData(QVariant(color), Qt::BackgroundRole);
-            }
-            else
-                item = model->item(row, column)->clone();
+            QStandardItem *item = new QStandardItem();
+            QImage part = image->copy(w*column, h*row, w, h);
+            part = part.scaled(SCREEN_W/3, SCREEN_H/4);
+            QBrush *brush = new QBrush(part);
+            item->setBackground(*brush);
             item->setSelectable(false);
             model->setItem(row, column, item);
         }
     }
-
     return model;
 }
 
@@ -165,6 +119,9 @@ void Help_Screen::init(){
     palette.setBrush(QPalette::HighlightedText,QBrush(Qt::black));
     table->setPalette(palette);
     table->setFocusPolicy(Qt::NoFocus);
+    table->setShowGrid(false);
+    table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     this->connect(table, SIGNAL(clicked(QModelIndex)), SLOT(onTableClicked(QModelIndex)));
 

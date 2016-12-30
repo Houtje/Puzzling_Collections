@@ -38,7 +38,8 @@ QString Puzzle::ItoS(int number)
 QImage *Puzzle::getFullImage(int number){
     if(number >= 0 && number < ALL_IMAGES){
         QString str = QDir::currentPath();
-        str += "/../../../../Naturalis/";
+        // str += "/../../../../Naturalis/";
+        str += "/../Naturalis/";
         str += ItoS(number);
         str += ".png";
         QImage *image = new QImage(str);

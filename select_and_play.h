@@ -23,6 +23,7 @@ protected:
     enum Screen {
         SC_MAIN,
         SC_DIFF,
+        SC_PUZZLE,
     };
     QTableView *table;
     QWidget *widget;
